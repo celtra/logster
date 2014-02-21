@@ -1,24 +1,25 @@
 # Logster - generate metrics from logfiles [![Build Status](https://secure.travis-ci.org/etsy/logster.png)](http://travis-ci.org/etsy/logster)
 
-Logster is a utility for reading log files and generating metrics in Graphite
-or Ganglia or Amazon CloudWatch. It is ideal for visualizing trends of events that are occurring in
-your application/system/error logs. For example, you might use logster to graph
-the number of occurrences of HTTP response code that appears in your web server
-logs.
+Logster is a utility for reading log files and generating metrics in Graphite,
+Ganglia, Riemann, statsd or Amazon CloudWatch. It is ideal for visualizing trends
+of events that are occurring in your application/system/error logs. For example,
+you might use logster to graph the number of occurrences of HTTP response code
+that appears in your web server logs.
 
 Logster maintains a cursor, via logtail, on each log file that it reads so that
 each successive execution only inspects new log entries. In other words, a 1
 minute crontab entry for logster would allow you to generate near real-time
-trends in Graphite or Ganglia or Amazon CloudWatch for anything you want to measure from your logs.
+trends in  Graphite, Ganglia, Riemann, statsd or Amazon CloudWatch for anything
+you want to measure from your logs.
 
 This tool is made up of a framework script, logster, and parsing scripts that
 are written to accommodate your specific log format. Two sample parsers are
 included in this distribution. The parser scripts essentially read a log file
 line by line, apply a regular expression to extract useful data from the lines
 you are interested in, and then aggregate that data into metrics that will be
-submitted to Ganglia or Graphite or Amazon CloudWatch. Take a look through the sample
-parsers, which should give you some idea of how to get started writing your
-own.
+submitted to Graphite, Ganglia, Riemann, statsd or Amazon CloudWatchGanglia. 
+Take a look through the sample parsers, which should give you some idea of how 
+to get started writing your own.
 
 
 ## History
@@ -57,7 +58,7 @@ You can test logster from the command line. There are two sample parsers:
 SampleLogster, which generates stats from an Apache access log; and
 Log4jLogster, which generates stats from a log4j log. The --dry-run option will
 allow you to see the metrics being generated on stdout rather than sending them
-to Ganglia or Graphite or Amazon CloudWatch.
+to Graphite, Ganglia, Riemann, statsd or Amazon CloudWatch
 
     $ sudo /usr/bin/logster --dry-run --output=ganglia SampleLogster /var/log/httpd/access_log
 
@@ -103,6 +104,11 @@ Additional usage details can be found with the -h option:
       --graphite-host=GRAPHITE_HOST
                             Hostname and port for Graphite collector, e.g.
                             graphite.example.com:2003
+      --riemann-host=RIEMANN_HOST
+                            Hostname and port for Riemann collector, e.g.
+                            riemann.example.org:5555'
+      --riemann-proto=RIEMANN_PROTO
+                            Riemann transport protocol, udp/tcp
       --statsd-host=STATSD_HOST
                             Hostname and port for statsd collector, e.g.
                             statsd.example.com:8125
@@ -124,7 +130,7 @@ Additional usage details can be found with the -h option:
       -o OUTPUT, --output=OUTPUT
                             Where to send metrics (can specify multiple times).
                             Choices are 'graphite', 'ganglia', 'cloudwatch',
-                            'nsca' , 'statsd', or 'stdout'.
+                            'nsca' , 'statsd', 'riemann' or 'stdout'.
       --stdout-separator=STDOUT_SEPARATOR
                             Seperator between prefix/suffix and name for stdout.
                             Default is "_".
